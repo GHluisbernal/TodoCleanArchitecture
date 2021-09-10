@@ -1,29 +1,33 @@
-﻿using CleanArchitecture.Domain.Entities;
+﻿using Amazon.AspNetCore.Identity.Cognito;
+using Amazon.CognitoIdentity.Model;
+using Amazon.Extensions.CognitoAuthentication;
+using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.ValueObjects;
 using CleanArchitecture.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CleanArchitecture.Infrastructure.Persistence
 {
     public static class ApplicationDbContextSeed
     {
-        public static async Task SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static async Task SeedDefaultUserAsync(CognitoUserManager<CognitoUser> userManager, CognitoRoleStore<CognitoRole> roleStore)
         {
-            var administratorRole = new IdentityRole("Administrator");
-
-            if (roleManager.Roles.All(r => r.Name != administratorRole.Name))
+            var administratorRole = new CognitoRole("Administrators", "Administrator", 0);
+            var role = await roleStore.FindByNameAsync(administratorRole.Name, CancellationToken.None);
+            if (role == null)
             {
-                await roleManager.CreateAsync(administratorRole);
+                await roleStore.CreateAsync(administratorRole, CancellationToken.None);
             }
 
-            var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost" };
-
-            if (userManager.Users.All(u => u.UserName != administrator.UserName))
+            var administratorUser = new ApplicationUser ("administrator@localhost");
+            var user = await userManager.FindByNameAsync(administratorUser.Username);
+            if (user == null)
             {
-                await userManager.CreateAsync(administrator, "Administrator1!");
-                await userManager.AddToRolesAsync(administrator, new[] { administratorRole.Name });
+                await userManager.CreateAsync(administratorUser, "Administrator1!");
+                await userManager.AddToRolesAsync(administratorUser, new[] { administratorRole.Name });
             }
         }
 

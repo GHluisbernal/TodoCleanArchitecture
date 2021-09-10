@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  webui:
+  RestApi:
     environment:
       - "ASPNETCORE_ENVIRONMENT=Development"
       - "SpaBaseUrl=http://clientapp:4200"
@@ -9,10 +9,10 @@ services:
   clientapp:
     image: ${DOCKER_REGISTRY-}clientapp
     build:
-      context: src/WebUI/ClientApp
+      context: src/RestApi/ClientApp
       dockerfile: Dockerfile
     depends_on:
-      - webui
+      - RestApi
     restart: on-failure
 
   db:

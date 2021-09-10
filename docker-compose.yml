@@ -1,11 +1,11 @@
 version: '3.4'
 
 services:
-  webui:
-    image: ${DOCKER_REGISTRY-}webui
+  RestApi:
+    image: ${DOCKER_REGISTRY-}RestApi
     build:
       context: .
-      dockerfile: src/WebUI/Dockerfile
+      dockerfile: src/RestApi/Dockerfile
     environment:
       - "UseInMemoryDatabase=false"
       - "ConnectionStrings__DefaultConnection=Server=db;Database=CleanArchitectureDb;User=sa;Password=Your_password123;MultipleActiveResultSets=true"

@@ -31,9 +31,9 @@ The easiest way to get started is to install the [NuGet package](https://www.nug
 3. Run `dotnet new --install Clean.Architecture.Solution.Template` to install the project template
 4. Create a folder for your solution and cd into it (the template will use it as project name)
 5. Run `dotnet new ca-sln` to create a new project
-6. Navigate to `src/WebUI/ClientApp` and run `npm install`
-7. Navigate to `src/WebUI/ClientApp` and run `npm start` to launch the front end (Angular)
-8. Navigate to `src/WebUI` and run `dotnet run` to launch the back end (ASP.NET Core Web API)
+6. Navigate to `src/RestApi/ClientApp` and run `npm install`
+7. Navigate to `src/RestApi/ClientApp` and run `npm start` to launch the front end (Angular)
+8. Navigate to `src/RestApi` and run `dotnet run` to launch the back end (ASP.NET Core Web API)
 
 Check out my [blog post](https://jasontaylor.dev/clean-architecture-getting-started/) for more information.
 
@@ -65,7 +65,7 @@ To disable Docker in Visual Studio, right-click on the **docker-compose** file i
 
 The template is configured to use an in-memory database by default. This ensures that all users will be able to run the solution without needing to set up additional infrastructure (e.g. SQL Server).
 
-If you would like to use SQL Server, you will need to update **WebUI/appsettings.json** as follows:
+If you would like to use SQL Server, you will need to update **RestApi/appsettings.json** as follows:
 
 ```json
   "UseInMemoryDatabase": false,
@@ -80,12 +80,12 @@ When you run the application the database will be automatically created (if nece
 To use `dotnet-ef` for your migrations please add the following flags to your command (values assume you are executing from repository root)
 
 * `--project src/Infrastructure` (optional if in this folder)
-* `--startup-project src/WebUI`
+* `--startup-project src/RestApi`
 * `--output-dir Persistence/Migrations`
 
 For example, to add a new migration from the root folder:
 
- `dotnet ef migrations add "SampleMigration" --project src\Infrastructure --startup-project src\WebUI --output-dir Persistence\Migrations`
+ `dotnet ef migrations add "SampleMigration" --project src\Infrastructure --startup-project src\RestApi --output-dir Persistence\Migrations`
 
 ## Overview
 
@@ -101,7 +101,7 @@ This layer contains all application logic. It is dependent on the domain layer, 
 
 This layer contains classes for accessing external resources such as file systems, web services, smtp, and so on. These classes should be based on interfaces defined within the application layer.
 
-### WebUI
+### RestApi
 
 This layer is a single page application based on Angular 10 and ASP.NET Core 5. This layer depends on both the Application and Infrastructure layers, however, the dependency on Infrastructure is only to support dependency injection. Therefore only *Startup.cs* should reference Infrastructure.
 
