@@ -13,25 +13,8 @@ namespace CleanArchitecture.Infrastructure.Persistence
 {
     public static class ApplicationDbContextSeed
     {
-        public static async Task SeedDefaultUserAsync(CognitoUserManager<CognitoUser> userManager, CognitoRoleStore<CognitoRole> roleStore)
-        {
-            var administratorRole = new CognitoRole("Administrators", "Administrator", 0);
-            var role = await roleStore.FindByNameAsync(administratorRole.Name, CancellationToken.None);
-            if (role == null)
-            {
-                await roleStore.CreateAsync(administratorRole, CancellationToken.None);
-            }
 
-            var administratorUser = new ApplicationUser ("administrator@localhost");
-            var user = await userManager.FindByNameAsync(administratorUser.Username);
-            if (user == null)
-            {
-                await userManager.CreateAsync(administratorUser, "Administrator1!");
-                await userManager.AddToRolesAsync(administratorUser, new[] { administratorRole.Name });
-            }
-        }
-
-        public static async Task SeedSampleDataAsync(ApplicationDbContext context)
+        public static void SeedSampleData(ApplicationDbContext context)
         {
             // Seed, if necessary
             if (!context.TodoLists.Any())
@@ -53,7 +36,7 @@ namespace CleanArchitecture.Infrastructure.Persistence
                     }
                 });
 
-                await context.SaveChangesAsync();
+                context.SaveChanges();
             }
         }
     }

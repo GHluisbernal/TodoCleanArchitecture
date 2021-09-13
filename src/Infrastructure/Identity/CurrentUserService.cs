@@ -1,4 +1,5 @@
-﻿using CleanArchitecture.Application.Common.Interfaces;
+﻿using Amazon.AspNetCore.Identity.Cognito;
+using CleanArchitecture.Application.Common.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -37,8 +38,7 @@ namespace CleanArchitecture.Infrastructure.Identity
                 .Succeeded
         );
         
-        public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-        public string UserName => _httpContextAccessor.HttpContext?.User?.FindFirstValue("username");
-
+        public string UserId => _httpContextAccessor.HttpContext?.User?.FindFirstValue(CognitoAttribute.Sub.ToString());
+        public string UserName => _httpContextAccessor.HttpContext?.User?.FindFirstValue(CognitoAttribute.UserName.ToString());
     }
 }

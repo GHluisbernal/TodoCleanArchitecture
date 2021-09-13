@@ -58,8 +58,8 @@ namespace CleanArchitecture.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
             base.OnModelCreating(builder);
+            ApplicationDbContextSeed.SeedSampleData(this);
         }
 
         private async Task DispatchEvents()
